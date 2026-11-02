@@ -1,6 +1,7 @@
 package com.taomee.seer2.core.ui.toolTip.tipSkins {
 import com.taomee.seer2.core.scene.LayerManager;
 import com.taomee.seer2.core.ui.UIManager;
+import com.taomee.seer2.core.ui.toolTip.TipStruct;
 import com.taomee.seer2.core.utils.DisplayObjectUtil;
 
 import flash.text.TextField;
@@ -9,23 +10,22 @@ import flash.text.TextFieldAutoSize;
 import seer2.next.utils.TextUtils;
 
 public class SkillTipSkin extends BaseTipSkin {
-
-
     private var _nameTxt:TextField;
-
     private var _descriptionTxt:TextField;
-
     private var _data:Object;
 
-    public function SkillTipSkin() {
-        super();
+    public function SkillTipSkin(parent:TipStruct = null) {
+        super(parent);
         this.initialize();
+        this.mouseChildren = true;
+        this.mouseEnabled = true;
+        // 尝试使用FixedToolTip, 必须要鼠标可交互
     }
 
     private function initialize():void {
         _tipSkin = UIManager.getMovieClip("UI_SkillTooltip");
-        _tipSkin.x = 10;
-        _tipSkin.y = 20;
+        //_tipSkin.x = 10;
+        //_tipSkin.y = 20;
         addChild(_tipSkin);
         _back = _tipSkin["back"];
         this._nameTxt = _tipSkin["itemName"];

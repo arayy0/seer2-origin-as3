@@ -89,7 +89,7 @@ public class Module extends Sprite {
         this.setBackGround();
         LayerManager.moduleLayer.addChild(this);
         this.setCoverUI();
-        if (!this._isAlignContent) {
+        /*if (!this._isAlignContent) {
             DisplayUtil.align(this, 4, this._rootRect, this._offset);
             this._isAlignContent = true;
             //嘤：保证只调用一次！首次调用这个的时候面板内容可能还没有完全加载出来，这里可以保证根据背景版调整位置
@@ -99,6 +99,7 @@ public class Module extends Sprite {
             //这部分透明的部分一旦超出背景板，就会使整个面板范围扩大。
             //由于美术设定都是以背景板为最大边界，溢出背景板的部分参与校准判断就会导致背景板看起来歪了（实际上也是歪了）
             //所以只调用一次，在背景板加载出来之后以背景板为对象校准一次，后续导致偏移的部分添加了也不要再校准
+            // 261021: 准备把它移动到setMainUI中。这是所有面板导入swf中图形界面的第一步，正常流程上也不会有其他图形在这之前添加
         }
         if (!this._isAlign) {
             this._setTimeout = setTimeout(this.align, 100);
@@ -109,6 +110,11 @@ public class Module extends Sprite {
             //TweenLite.from(this, 0.3, {"alpha": 0});
             //不时延直接校准
         }
+        */
+        // 261030: 尼玛比的淘米，居然真有面板不setMainUI，那只能在这放一个防一手了
+        if (!this._isAlign) {
+            this.align();
+        }
     }
 
     protected function setCoverUI():void {
@@ -117,23 +123,23 @@ public class Module extends Sprite {
                 this._coverUI = new UI_ScreenCover();
                 this._coverUI.cacheAsBitmap = true;
             }
-            if (LayerManager.moduleLayer.contains(this._coverUI) == false) {
+            if (!LayerManager.moduleLayer.contains(this._coverUI)) {
                 LayerManager.moduleLayer.addChildAt(this._coverUI, 0);
             }
         }
     }
 
     public function align():void {
-        if (this._isAlign) return;//防止反复校准位置（导致偏移）
-        var _loc1_:int = 0;
-        var _loc2_:int = 0;
+        if (this._isAlign) return; // 防止反复校准位置（导致偏移）
+        var _loc1_:int;
+        var _loc2_:int;
         this._rootRect = new Rectangle(0, 0, this.WINDOW_W, this.WINDOW_H);
         if (!this._isAlignContent) {
             DisplayUtil.align(this, 4, this._rootRect, this._offset);
         }
         if (this.width >= this.WINDOW_W) {
-            _loc1_ = LayerManager.stage.stageWidth <= 960 ? 960 : LayerManager.stage.stageWidth;
-            _loc2_ = LayerManager.stage.stageHeight <= 560 ? 560 : LayerManager.stage.stageHeight;
+            _loc1_ = LayerManager.stage.stageWidth <= 1200 ? 1200 : LayerManager.stage.stageWidth;
+            _loc2_ = LayerManager.stage.stageHeight <= 660 ? 660 : LayerManager.stage.stageHeight;
         } else {
             _loc1_ = LayerManager.stage.stageWidth < this.width ? int(this.width) : LayerManager.stage.stageWidth;
             _loc2_ = LayerManager.stage.stageHeight < this.height ? int(this.height) : LayerManager.stage.stageHeight;
@@ -184,7 +190,7 @@ public class Module extends Sprite {
     public function hide():void {
         this.checkShowMap();
         DisplayUtil.removeForParent(this, false);
-        if (Boolean(this._coverUI) && LayerManager.moduleLayer.contains(this._coverUI) == true) {
+        if (Boolean(this._coverUI) && LayerManager.moduleLayer.contains(this._coverUI)) {
             DisplayUtil.removeForParent(this._coverUI, false);
         }
         SoundEffects.playBtnClick();
@@ -193,7 +199,7 @@ public class Module extends Sprite {
     public function dispose():void {
         this.checkShowMap();
         DisplayUtil.removeForParent(this);
-        if (Boolean(this._coverUI) && LayerManager.moduleLayer.contains(this._coverUI) == true) {
+        if (Boolean(this._coverUI) && LayerManager.moduleLayer.contains(this._coverUI)) {
             DisplayUtil.removeForParent(this._coverUI);
         }
         this._coverUI = null;
@@ -206,6 +212,10 @@ public class Module extends Sprite {
         this._closeBtn = this._mainUI["closeBtn"] as SimpleButton;
         this._dragSprite = this._mainUI["dragMC"] as Sprite;
         this.initEventListener();
+        // 这是所有面板导入swf中图形界面的第一步，正常流程上也不会有其他图形在这之前添加
+        if (!this._isAlign) {
+            this.align();
+        }
     }
 
     protected function onClose(param1:MouseEvent):void {

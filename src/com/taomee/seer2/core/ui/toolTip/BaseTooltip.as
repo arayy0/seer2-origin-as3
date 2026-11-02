@@ -34,8 +34,8 @@ internal class BaseTooltip extends Sprite {
         }
         param1.addEventListener(MouseEvent.ROLL_OVER, this.onTargetOver);
         param1.addEventListener(MouseEvent.ROLL_OUT, this.onTargetOut);
-        var _loc7_:TipStuct;
-        (_loc7_ = new TipStuct()).tip = param2;
+        var _loc7_:TipStruct;
+        (_loc7_ = new TipStruct()).tip = param2;
         _loc7_.tipSkin = param3;
         _loc7_.over = param4;
         _loc7_.out = param5;
@@ -44,11 +44,11 @@ internal class BaseTooltip extends Sprite {
     }
 
     public function remove(param1:InteractiveObject):void {
-        var _loc2_:TipStuct = null;
-        if (Boolean(this._map.containsKey(param1)) && this._map.getValue(param1) is TipStuct) {
+        var _loc2_:TipStruct = null;
+        if (Boolean(this._map.containsKey(param1)) && this._map.getValue(param1) is TipStruct) {
             param1.removeEventListener(MouseEvent.ROLL_OVER, this.onTargetOver);
             param1.removeEventListener(MouseEvent.ROLL_OUT, this.onTargetOut);
-            _loc2_ = this._map.getValue(param1) as TipStuct;
+            _loc2_ = this._map.getValue(param1) as TipStruct;
             _loc2_.tipSkin.hide();
             this._map.remove(param1);
         } else if (this._map.containsKey(param1)) {
@@ -61,7 +61,7 @@ internal class BaseTooltip extends Sprite {
     }
 
     public function chanegTip(param1:InteractiveObject, param2:String):void {
-        var _loc3_:TipStuct = null;
+        var _loc3_:TipStruct = null;
         if (this._map.containsKey(param1)) {
             _loc3_ = this._map.getValue(param1);
             _loc3_.tip = param2;
@@ -69,7 +69,7 @@ internal class BaseTooltip extends Sprite {
     }
 
     public function setData(param1:InteractiveObject, param2:Object):void {
-        var _loc3_:TipStuct = null;
+        var _loc3_:TipStruct = null;
         if (this._map.containsKey(param1)) {
             _loc3_ = this._map.getValue(param1);
             _loc3_.tipSkin.setData(param2);
@@ -117,7 +117,7 @@ internal class BaseTooltip extends Sprite {
     }
 
     private function onTargetOver(param1:MouseEvent):void {
-        var _loc2_:TipStuct = this._map.getValue(param1.currentTarget as InteractiveObject) as TipStuct;
+        var _loc2_:TipStruct = this._map.getValue(param1.currentTarget as InteractiveObject) as TipStruct;
         if (_loc2_) {
             _loc2_.tipSkin.show(_loc2_.tip);
             if (_loc2_.over != null) {
@@ -130,7 +130,7 @@ internal class BaseTooltip extends Sprite {
     }
 
     private function onTargetOut(param1:MouseEvent):void {
-        var _loc2_:TipStuct = this._map.getValue(param1.currentTarget as InteractiveObject) as TipStuct;
+        var _loc2_:TipStruct = this._map.getValue(param1.currentTarget as InteractiveObject) as TipStruct;
         _loc2_.tipSkin.hide();
         if (_loc2_.out != null) {
             _loc2_.out();
@@ -165,24 +165,4 @@ internal class BaseTooltip extends Sprite {
         }
     }
 }
-}
-
-import com.taomee.seer2.core.ui.toolTip.tipSkins.BaseTipSkin;
-
-class TipStuct {
-
-
-    public var tip:String;
-
-    public var tipSkin:BaseTipSkin;
-
-    public var over:Function;
-
-    public var out:Function;
-
-    public var content:*;
-
-    public function TipStuct() {
-        super();
-    }
 }

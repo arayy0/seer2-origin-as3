@@ -16,6 +16,8 @@ public class TooltipManager {
 
     private static var _toolTip:BaseTooltip;
 
+    private static var _fixedToolTip:FixedToolTip;
+
 
     public function TooltipManager() {
         super();
@@ -23,6 +25,7 @@ public class TooltipManager {
 
     public static function setup():void {
         _toolTip = new BaseTooltip();
+        _fixedToolTip = new FixedToolTip();
     }
 
     public static function addExternalTip(param1:InteractiveObject, param2:MovieClip, param3:String = "", param4:Function = null, param5:Function = null, param6:* = null):void {
@@ -51,8 +54,8 @@ public class TooltipManager {
     }
 
     public static function addSkillTip(param1:InteractiveObject, param2:Object = null):void {
-        _toolTip.add(param1, "", new SkillTipSkin());
-        _toolTip.setData(param1, param2);
+        _fixedToolTip.add(param1, "", new SkillTipSkin());
+        _fixedToolTip.setData(param1, param2);
     }
 
     public static function changeTip(param1:InteractiveObject, param2:String):void {
@@ -61,6 +64,7 @@ public class TooltipManager {
 
     public static function setData(param1:InteractiveObject, param2:Object):void {
         _toolTip.setData(param1, param2);
+        _fixedToolTip.setData(param1, param2);
     }
 
     public static function remove(param1:InteractiveObject):void {

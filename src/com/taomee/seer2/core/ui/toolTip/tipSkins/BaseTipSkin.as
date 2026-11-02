@@ -1,5 +1,6 @@
 package com.taomee.seer2.core.ui.toolTip.tipSkins {
 import com.taomee.seer2.core.scene.LayerManager;
+import com.taomee.seer2.core.ui.toolTip.TipStruct;
 
 import flash.display.MovieClip;
 import flash.display.Sprite;
@@ -8,16 +9,14 @@ import flash.text.TextField;
 import org.taomee.utils.StringUtil;
 
 public class BaseTipSkin extends Sprite {
-
-
     protected var _tipSkin:MovieClip;
-
     protected var _tipTxt:TextField;
-
     protected var _back:MovieClip;
+    public var _parentTipStruct:TipStruct;
 
-    public function BaseTipSkin() {
+    public function BaseTipSkin(parent:TipStruct = null) {
         super();
+        this._parentTipStruct = parent;
         this.mouseChildren = false;
         this.mouseEnabled = false;
     }
